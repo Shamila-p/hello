@@ -69,8 +69,12 @@ def list_booking(request):
             bookings = Booking.objects.filter(
                 collection_agent_id=request.user.id).exclude(status__in=status )
             book= Booking.objects.filter(
-                collection_agent_id=request.user.id).exclude(status__in=status ).first()
+                collection_agent_id=request.user.id).first()
+            print(book)
+            print(book.smartbin_id)
+            print(book.smartbin.user_id)
             location=UserLocation.objects.filter(user_id=book.smartbin.user_id).first()
+            print('locl',location)
             context = {'title': 'List Tasks',
                        'bookings': bookings, 'add_button_name': 'COLLECT', 'add_button_url_name': 'collect','location':location}
         return render(request, 'list_booking.html', context)
