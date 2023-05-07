@@ -49,6 +49,7 @@ def list_recycler_booking(request):
             recycler_bookings = RecyclerBooking.objects.filter(
                 recycler_id=request.user.id).exclude(status=RecyclerBooking.VERIFIED)
             recycler_amount=RecyclerAmount.objects.get(recycler_id=request.user.id)
+            
             for recycler_booking in recycler_bookings:
                 recycler_booking.total_price_for_waste = recycler_booking.paper_waste*recycler_amount.paper_amount + recycler_amount.metal_amount*recycler_booking.metal_waste
             context = {'title': 'List Tasks',
