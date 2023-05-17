@@ -10,28 +10,51 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
 
+# @csrf_exempt
+# def booking_create(request):
+#     if request.method == 'POST':
+#         body_unicode = request.body.decode('utf-8')
+#         body = json.loads(body_unicode)
+#         bin_id = body.get('bin_id')
+#         if SmartBin.objects.filter(bin_id=bin_id).exists():
+#             smartbin = SmartBin.objects.get(bin_id=bin_id)
+#             if not Booking.objects.filter(smartbin_id=smartbin.id).exclude(status=Booking.VERIFIED).exists():
+#                 Booking.objects.create(
+#                     smartbin_id=smartbin.id, status=Booking.PENDING, type=Booking.AUTOMATIC)
+#                 smartbin.fill_status = True
+#                 smartbin.save()
+#                 return JsonResponse(
+#                     {'status': 'success'},
+#                     safe=False
+#                 )
+#         else:
+#             return JsonResponse(
+#                 {'status': 'failed'},
+#                 safe=False
+#             )
 @csrf_exempt
 def booking_create(request):
     if request.method == 'POST':
-        body_unicode = request.body.decode('utf-8')
-        body = json.loads(body_unicode)
-        bin_id = body.get('bin_id')
-        if SmartBin.objects.filter(bin_id=bin_id).exists():
-            smartbin = SmartBin.objects.get(bin_id=bin_id)
-            if not Booking.objects.filter(smartbin_id=smartbin.id).exclude(status=Booking.VERIFIED).exists():
-                Booking.objects.create(
-                    smartbin_id=smartbin.id, status=Booking.PENDING, type=Booking.AUTOMATIC)
-                smartbin.fill_status = True
-                smartbin.save()
-                return JsonResponse(
-                    {'status': 'success'},
-                    safe=False
-                )
-        else:
-            return JsonResponse(
-                {'status': 'failed'},
-                safe=False
-            )
+        bin_id = request.POST.get('bin_id')
+
+        if bin_id:
+            if SmartBin.objects.filter(bin_id=bin_id).exists():
+                smartbin = SmartBin.objects.get(bin_id=bin_id)
+                if not Booking.objects.filter(smartbin_id=smartbin.id).exclude(status=Booking.VERIFIED).exists():
+                    Booking.objects.create(
+                        smartbin_id=smartbin.id, status=Booking.PENDING, type=Booking.AUTOMATIC)
+                    smartbin.fill_status = True
+                    smartbin.save()
+                    return JsonResponse(
+                        {'status': 'success'},
+                        safe=False
+                    )
+
+        return JsonResponse(
+            {'status': 'failed'},
+            safe=False
+        )
+
 
 
 @login_required
