@@ -13,15 +13,19 @@ from django.views.decorators.csrf import csrf_exempt
 # @csrf_exempt
 # def booking_create(request):
 #     if request.method == 'POST':
+#         print(request.body)
 #         body_unicode = request.body.decode('utf-8')
+#         print(body_unicode)
 #         body = json.loads(body_unicode)
 #         bin_id = body.get('bin_id')
 #         if SmartBin.objects.filter(bin_id=bin_id).exists():
 #             smartbin = SmartBin.objects.get(bin_id=bin_id)
+#             print(smartbin)
 #             if not Booking.objects.filter(smartbin_id=smartbin.id).exclude(status=Booking.VERIFIED).exists():
 #                 Booking.objects.create(
 #                     smartbin_id=smartbin.id, status=Booking.PENDING, type=Booking.AUTOMATIC)
 #                 smartbin.fill_status = True
+#                 print(smartbin.fill_status)
 #                 smartbin.save()
 #                 return JsonResponse(
 #                     {'status': 'success'},
@@ -32,14 +36,36 @@ from django.views.decorators.csrf import csrf_exempt
 #                 {'status': 'failed'},
 #                 safe=False
 #             )
+import json
+
+# @csrf_exempt
+# def booking_create(request):
+#     if request.method == 'POST':
+#         bin_id = request.POST.get('bin_id')
+#         if bin_id is not None:
+#             if SmartBin.objects.filter(bin_id=bin_id).exists():
+#                 smartbin = SmartBin.objects.get(bin_id=bin_id)
+#                 if not Booking.objects.filter(smartbin_id=smartbin.id).exclude(status=Booking.VERIFIED).exists():
+#                     Booking.objects.create(
+#                         smartbin_id=smartbin.id, status=Booking.PENDING, type=Booking.AUTOMATIC
+#                     )
+#                     smartbin.fill_status = True
+#                     smartbin.save()
+#                     return JsonResponse({'status': 'success'}, safe=False)
+#             else:
+#                 return JsonResponse({'status': 'failed'}, safe=False)
+#     return JsonResponse({'status': 'failed'}, safe=False)
+
 @csrf_exempt
 def booking_create(request):
     if request.method == 'POST':
         bin_id = request.POST.get('bin_id')
+        print(bin_id)
 
         if bin_id:
             if SmartBin.objects.filter(bin_id=bin_id).exists():
                 smartbin = SmartBin.objects.get(bin_id=bin_id)
+                print(smartbin)
                 if not Booking.objects.filter(smartbin_id=smartbin.id).exclude(status=Booking.VERIFIED).exists():
                     Booking.objects.create(
                         smartbin_id=smartbin.id, status=Booking.PENDING, type=Booking.AUTOMATIC)

@@ -38,6 +38,12 @@ class User(AbstractUser):
             url=""
         return url
 
+    @property
+    def role_name(self):
+        for role_code, role_name in self.ROLES_CHOICES:
+            if role_code == self.role:
+                return role_name
+        return ""
 
 
 class CollectionAgent(models.Model):
