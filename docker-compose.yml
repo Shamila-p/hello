@@ -1,0 +1,17 @@
+version: '3'
+services:
+  v2hsystem:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smartrash
+    image: smartrash
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - /var/log/smartrash:/var/log/smartrash
+      - /var/www/smartrash/assets:/app/assets
+
+    env_file:
+      - .env
